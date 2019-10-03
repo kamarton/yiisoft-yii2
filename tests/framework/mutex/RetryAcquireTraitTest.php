@@ -41,8 +41,12 @@ class RetryAcquireTraitTest extends TestCase
                 continue;
             }
 
-            $intervalMilliseconds = ($mutexTwo->attemptsTime[$i] - $mutexTwo->attemptsTime[$i-1]) * 1000;
-            $this->assertGreaterThanOrEqual($mutexTwo->retryDelay, $intervalMilliseconds);
+            $intervalMilliseconds = ($mutexTwo->attemptsTime[$i] - $mutexTwo->attemptsTime[$i - 1]) * 1000;
+            if (getenv('isappvoyertesting') !== false) {
+                $this->assertGreaterThanOrEqual($mutexTwo->retryDelay - 2.0, $intervalMilliseconds);
+            } else {
+                $this->assertGreaterThanOrEqual($mutexTwo->retryDelay, $intervalMilliseconds);
+            }
         }
     }
 
